@@ -8,11 +8,11 @@ fi
 cat << EOF > config.json
 {
   "wwwAddress": "0.0.0.0",
-  "wwwPort": 8080,
+  "wwwPort": 3000,
   "wwwPublicURL": "${PUBLIC_URL}",
   "serviceAddress": "0.0.0.0",
   "servicePort": 8085,
-  "servicePublicURL": "",
+  "servicePublicURL": "${PUBLIC_URL}",
   "smtpAddress": "0.0.0.0",
   "smtpPort": 2500,
   "dbEngine": "SQLite",
@@ -29,5 +29,7 @@ cat << EOF > config.json
   "adminCertFile": ""
 }
 EOF
+
+./mailslurper &
 
 exec "$@"

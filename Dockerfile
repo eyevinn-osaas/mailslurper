@@ -14,6 +14,7 @@ RUN go build
 
 FROM alpine:3.15
 
+RUN apk add --no-cache nginx
 RUN apk add --no-cache ca-certificates \
  && echo -e '{\n\
   "wwwAddress": "0.0.0.0",\n\
@@ -41,9 +42,10 @@ RUN apk add --no-cache ca-certificates \
 
 COPY --from=builder /go/src/github.com/mailslurper/mailslurper/cmd/mailslurper/mailslurper mailslurper
 
+COPY --from=builder /go/src/github.com/mailslurper/mailslurper/nginx.conf /etc/nginx/http.d/default.conf
 COPY --from=builder /go/src/github.com/mailslurper/mailslurper/entrypoint.sh entrypoint.sh
 RUN chmod +x ./entrypoint.sh
-EXPOSE 8080 8085 2500
+EXPOSE 8080 2500
 
 ENTRYPOINT [ "./entrypoint.sh" ]
-CMD ["./mailslurper"]
+CMD ["nginx", "-g", "daemon off;"]
